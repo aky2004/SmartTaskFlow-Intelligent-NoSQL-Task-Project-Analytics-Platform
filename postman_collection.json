@@ -1,0 +1,201 @@
+{
+  "info": {
+    "name": "SmartTaskFlow API",
+    "_postman_id": "smart-taskflow-cse494-collection",
+    "description": "Complete Postman collection for SmartTaskFlow NoSQL Analytics Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Student Demo\",\n  \"email\": \"student@demo.io\",\n  \"password\": \"Password123!\",\n  \"role\": \"admin\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "  pm.environment.set('authToken', res.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alice@smarttaskflow.io\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/projects", "host": ["{{baseUrl}}"], "path": ["api", "projects"] }
+          }
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"CSE494 Final Demonstration\",\n  \"description\": \"Comprehensive NoSQL task management demo for viva\",\n  \"status\": \"active\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/projects", "host": ["{{baseUrl}}"], "path": ["api", "projects"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks (With Filters)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/tasks?status=in_progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "tasks"],
+              "query": [{ "key": "status", "value": "in_progress" }]
+            }
+          }
+        },
+        {
+          "name": "Search Tasks (Text Index)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/tasks?search=MongoDB",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "tasks"],
+              "query": [{ "key": "search", "value": "MongoDB" }]
+            }
+          }
+        },
+        {
+          "name": "Add Subtask to Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Verify explain() IXSCAN execution output in terminal\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/tasks/{{taskId}}/subtasks", "host": ["{{baseUrl}}"], "path": ["api", "tasks", "{{taskId}}", "subtasks"] }
+          }
+        },
+        {
+          "name": "Add Comment to Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Database performance test successfully executed.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/tasks/{{taskId}}/comments", "host": ["{{baseUrl}}"], "path": ["api", "tasks", "{{taskId}}", "comments"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics & Aggregations",
+      "item": [
+        {
+          "name": "Tasks Overview ($facet)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/analytics/overview", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "overview"] }
+          }
+        },
+        {
+          "name": "Overdue Tasks Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/analytics/overdue", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "overdue"] }
+          }
+        },
+        {
+          "name": "User Workload Distribution",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/analytics/workload", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "workload"] }
+          }
+        },
+        {
+          "name": "Project Progress & Velocity",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/analytics/project/{{projectId}}/progress", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "project", "{{projectId}}", "progress"] }
+          }
+        },
+        {
+          "name": "Riskiest Tasks (AI Risk Score)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/analytics/riskiest?limit=10", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "riskiest"], "query": [{ "key": "limit", "value": "10" }] }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5050" },
+    { "key": "authToken", "value": "" },
+    { "key": "taskId", "value": "" },
+    { "key": "projectId", "value": "" }
+  ]
+}

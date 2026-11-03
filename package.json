@@ -1,0 +1,16 @@
+{
+  "name": "smart-taskflow",
+  "version": "1.0.0",
+  "description": "SmartTaskFlow – Intelligent NoSQL Task & Project Analytics Platform (CSE494)",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "seed": "cd backend && node src/scripts/seed.js",
+    "indexes": "cd backend && node src/scripts/createIndexes.js",
+    "analyze": "cd backend && node src/scripts/analyzePerformance.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

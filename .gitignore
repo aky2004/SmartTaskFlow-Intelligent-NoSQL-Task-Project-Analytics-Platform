@@ -1,0 +1,16 @@
+node_modules
+.env
+.DS_Store
+dist
+*.log
+
+# Subfolders
+backend/node_modules
+backend/.env
+frontend/node_modules
+frontend/dist
+sample_extracted/
+*.docx
+*.doc
+generate_master_report.py
+generate_full_pdf_report.py
